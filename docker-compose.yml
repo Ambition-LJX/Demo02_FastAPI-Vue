@@ -1,0 +1,39 @@
+# docker-compose 把「后端」和「前端」两个容器一起编排、一键启动。
+# 它们会自动加入同一个网络，能用「服务名」互相访问（前端 Nginx 就是靠这个访问 backend）。
+services:
+  # ---------- 后端服务：FastAPI ----------
+  backend:
+    # 用 ./backend 目录下的 Dockerfile 构建
+    build: ./backend
+    container_name: demo02-backend
+    # 数据卷：把宿主机的 ./backend/data 挂到容器 /app/data
+    # 容器删了重建，SQLite 数据库也不会丢
+    volumes:
+      - ./backend/data:/app/data
+    environment:
+      - DATA_DIR=/app/data
+    restart: unless-stopped
+    # 健康检查：定期访问 /health，状态里能看到 healthy
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
+    # 注意：这里不对外映射端口。后端只在内网被前端 Nginx 访问，更安全。
+    # 如果你想在本机直接调后端接口，把下面两行的注释去掉即可。
+    # ports:
+    #   - "8000:8000"
+
+  # ---------- 前端服务：Vue 打包产物 + Nginx ----------
+  frontend:
+    build: ./frontend
+    container_name: demo02-frontend
+    # 端口映射：宿主机 8080 -> 容器 80（Nginx）
+    # 浏览器访问 http://localhost:8080 即可
+    ports:
+      - "8080:80"
+    # 前端依赖后端：等后端容器启动后再启动前端
+    depends_on:
+      - backend
+    restart: unless-stopped

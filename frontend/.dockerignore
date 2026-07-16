@@ -1,0 +1,21 @@
+# 依赖目录：镜像内会重新 npm install，不需要把本地的带进去
+node_modules/
+
+# 打包产物：镜像内会重新 build
+dist/
+
+# 日志与缓存
+npm-debug.log*
+.vite/
+
+# IDE / 系统文件
+.idea/
+.vscode/
+.DS_Store
+
+# Git
+.git/
+.gitignore
+
+# 文档
+README.md

@@ -1,0 +1,23 @@
+# Python 缓存与虚拟环境
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+env/
+
+# 本地数据库文件，不要打进镜像
+data/
+*.db
+
+# IDE / 系统文件
+.idea/
+.vscode/
+.DS_Store
+
+# Git
+.git/
+.gitignore
+
+# 文档
+README.md
