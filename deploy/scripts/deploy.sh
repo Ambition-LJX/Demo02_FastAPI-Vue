@@ -16,7 +16,7 @@ NC='\033[0m' # No Color
 
 # 配置（请根据实际情况修改）
 REGISTRY="ghcr.io"
-USERNAME="YOUR_USERNAME"           # 改成你的 GitHub 用户名
+USERNAME="ambition-ljx"             # 改成你的 GitHub 用户名
 PROJECT_DIR="/opt/demo02"
 
 # 登录 GitHub Container Registry

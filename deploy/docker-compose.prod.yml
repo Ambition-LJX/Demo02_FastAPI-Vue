@@ -1,7 +1,7 @@
 # 生产环境部署：从镜像仓库拉取镜像，不做本地构建
 services:
   backend:
-    image: ghcr.io/Ambition-LJX/demo02-backend:latest
+    image: ghcr.io/ambition-ljx/demo02-backend:latest
     container_name: demo02-backend-prod
     restart: always
     volumes:
@@ -18,7 +18,7 @@ services:
       - app-network
 
   frontend:
-    image: ghcr.io/Ambition-LJX/demo02-frontend:latest
+    image: ghcr.io/ambition-ljx/demo02-frontend:latest
     container_name: demo02-frontend-prod
     restart: always
     ports:
