@@ -11,9 +11,9 @@ env:
   IMAGE_BACKEND: demo02-backend
   IMAGE_FRONTEND: demo02-frontend
 
-  # 完整镜像路径（含小写用户名，Docker 仓库名不能有大写）
-  IMAGE_BACKEND_FULL: ghcr.io/${{ lower(github.repository_owner) }}/demo02-backend
-  IMAGE_FRONTEND_FULL: ghcr.io/${{ lower(github.repository_owner) }}/demo02-frontend
+  # 完整镜像路径（直接写小写用户名，最稳的写法）
+  IMAGE_BACKEND_FULL: ghcr.io/ambition-ljx/demo02-backend
+  IMAGE_FRONTEND_FULL: ghcr.io/ambition-ljx/demo02-frontend
 
 jobs:
   build-and-push:
