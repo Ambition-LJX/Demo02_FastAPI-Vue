@@ -1,0 +1,49 @@
+# 生产环境部署：从镜像仓库拉取镜像，不做本地构建
+services:
+  backend:
+    image: ghcr.io/Ambition-LJX/demo02-backend:latest
+    container_name: demo02-backend-prod
+    restart: always
+    volumes:
+      - ./data:/app/data
+    environment:
+      - DATA_DIR=/app/data
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    networks:
+      - app-network
+
+  frontend:
+    image: ghcr.io/Ambition-LJX/demo02-frontend:latest
+    container_name: demo02-frontend-prod
+    restart: always
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    networks:
+      - app-network
+
+  # Watchtower：自动检测并更新镜像
+  watchtower:
+    image: containrrr/watchtower
+    container_name: watchtower
+    restart: always
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /root/.docker/config.json:/config.json:ro
+    environment:
+      - WATCHTOWER_CLEANUP=true           # 更新后删除旧镜像
+      - WATCHTOWER_POLL_INTERVAL=300      # 每 300 秒（5分钟）检查一次
+      - WATCHTOWER_INCLUDE_STOPPED=true   # 也更新已停止的容器
+      - WATCHTOWER_DEBUG=false            # 生产环境关掉调试日志
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
